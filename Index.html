@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Probably Boring</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+    }
+
+    /* =========================
+       MAIN WEBSITE
+    ========================= */
+
+    header {
+      background: white;
+      padding: 25px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 32px;
+    }
+
+    .subtitle {
+      color: #777;
+      margin-top: 8px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+
+    .tools {
+      display: grid;
+      grid-template-columns:
+        repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+    }
+
+    .tool {
+      background: white;
+      padding: 25px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .tool h2 {
+      font-size: 20px;
+    }
+
+    button {
+      padding: 10px 16px;
+      border: 1px solid #ccc;
+      background: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #eee;
+    }
+
+    footer {
+      text-align: center;
+      color: #888;
+      padding: 30px;
+    }
+
+    /* The secret S */
+
+    .secret-s {
+      cursor: default;
+    }
+
+
+    /* =========================
+       PUZZLE 1
+    ========================= */
+
+    .puzzle-page {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+
+    .puzzle-box {
+      background: white;
+      padding: 35px;
+      width: 90%;
+      max-width: 500px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .puzzle-box input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    .result {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+
+    /* =========================
+       PUZZLE 2
+    ========================= */
+
+    .question {
+      font-size: 22px;
+      margin: 25px 0;
+    }
+
+
+    /* =========================
+       PUZZLE 3
+    ========================= */
+
+    .sequence {
+      font-size: 24px;
+      letter-spacing: 5px;
+      margin: 25px 0;
+    }
+
+
+    /* =========================
+       FINAL CHECKPOINT
+    ========================= */
+
+    .checkpoint {
+      min-height: 100vh;
+      background: #f5f5f5;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 80px;
+    }
+
+    .checkpoint h1 {
+      font-size: 32px;
+    }
+
+    .checkpoint-box {
+      background: white;
+      width: 90%;
+      max-width: 500px;
+      margin: 40px auto 20px;
+      padding: 30px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+    }
+
+    .feedback-label {
+      text-align: left;
+      font-weight: bold;
+    }
+
+    #feedback {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+
+    #finalResult {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    .side-clue {
+      color: #777;
+      font-style: italic;
+    }
+
+
+    /* =========================
+       USELLESS PAGE
+    ========================= */
+
+    .useless {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      background: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .useless h1 {
+      font-size: 50px;
+    }
+
+
+    /* =========================
+       4 × 4 SECRET BUTTON
+    ========================= */
+
+    .secret-dot {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+
+      width: 4px;
+      height: 4px;
+
+      padding: 0;
+      border: 0;
+
+      background: transparent;
+
+      cursor: pointer;
+    }
+
+    /*
+      Only for testing.
+      Remove this later if you want the button
+      to be completely invisible.
+    */
+
+    .secret-dot:hover,
+    .secret-dot:focus {
+      background: #999;
+    }
+
+
+    /* =========================
+       REAL SECRET PAGE
+    ========================= */
+
+    .real-secret {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .real-secret h1 {
+      font-size: 42px;
+    }
+
+  </style>
+</head>
+
+
+<body>
+
+  <!-- =========================
+       MAIN WEBSITE
+  ========================= -->
+
+  <header>
+
+    <h1>
+      Probably Boring — Just Thing<span
+        class="secret-s"
+        onclick="secret()"
+      >s</span> You Might Need
+    </h1>
+
+    <div class="subtitle">
+      Simple tools for simple things.
+    </div>
+
+  </header>
+
+
+  <div class="container">
+
+    <div class="tools">
+
+
+      <div class="tool">
+
+        <h2>📝 Notes</h2>
+
+        <p>
+          Write something down.
+        </p>
+
+        <button onclick="alert('Maybe later.')">
+          Open
+        </button>
+
+      </div>
+
+
+      <div class="tool">
+
+        <h2>🎲 Random Number</h2>
+
+        <p>
+          Get a random number.
+        </p>
+
+        <button onclick="randomNumber()">
+          Generate
+        </button>
+
+      </div>
+
+
+      <div class="tool">
+
+        <h2>⏱️ Timer</h2>
+
+        <p>
+          A very ordinary timer.
+        </p>
+
+        <button onclick="alert('Timer coming soon.')">
+          Open
+        </button>
+
+      </div>
+
+
+      <div class="tool">
+
+        <h2>🔄 Unit Converter</h2>
+
+        <p>
+          Convert simple units.
+        </p>
+
+        <button onclick="alert('Converter coming soon.')">
+          Open
+        </button>
+
+      </div>
+
+
+      <div class="tool">
+
+        <h2>📋 Checklist</h2>
+
+        <p>
+          Don't forget things.
+        </p>
+
+        <button onclick="alert('You remembered the checklist.')">
+          Open
+        </button>
+
+      </div>
+
+
+      <div class="tool">
+
+        <h2>🎯 Random Choice</h2>
+
+        <p>
+          Can't decide?
+        </p>
+
+        <button onclick="randomChoice()">
+          Choose
+        </button>
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+
+  <footer>
+    © 2026 Probably Boring
+  </footer>
+
+
+
+  <script>
+
+    /* =========================
+       NORMAL WEBSITE FUNCTIONS
+    ========================= */
+
+    function randomNumber() {
+
+      let number =
+        Math.floor(Math.random() * 100) + 1;
+
+      alert(
+        "Your number is: " + number
+      );
+    }
+
+
+    function randomChoice() {
+
+      let choices = [
+        "Yes",
+        "No",
+        "Maybe",
+        "Do it",
+        "Don't do it"
+      ];
+
+      let result =
+        choices[
+          Math.floor(
+            Math.random() * choices.length
+          )
+        ];
+
+      alert(result);
+    }
+
+
+
+    /* =========================
+       SECRET S
+    ========================= */
+
+    function secret() {
+
+      document.body.innerHTML = `
+
+        <div class="puzzle-page">
+
+          <div class="puzzle-box">
+
+            <h2>Probably Boring — Help</h2>
+
+            <p>
+              Fill in the blanks.
+            </p>
+
+            <p>
+              Hallo, mein _____ ist danger.
+              <br><br>
+              Meine Schwester ist _____ Jahre alt.
+            </p>
+
+
+            <input
+              id="answer1"
+              placeholder="First answer"
+              autocomplete="off"
+            >
+
+
+            <input
+              id="answer2"
+              placeholder="Second answer"
+              autocomplete="off"
+            >
+
+
+            <button onclick="checkPuzzle1()">
+              Submit
+            </button>
+
+
+            <div
+              id="result1"
+              class="result"
+            ></div>
+
+          </div>
+
+        </div>
+
+      `;
+    }
+
+
+
+    /* =========================
+       PUZZLE 1
+    ========================= */
+
+    function checkPuzzle1() {
+
+      const answer1 =
+        document
+          .getElementById("answer1")
+          .value
+          .trim()
+          .toLowerCase();
+
+
+      const answer2 =
+        document
+          .getElementById("answer2")
+          .value
+          .trim()
+          .toLowerCase();
+
+
+      /*
+        Prototype answers.
+
+        We'll secure this properly before publishing.
+      */
+
+      const correct1 = "vater";
+      const correct2 = "4";
+
+
+      if (
+        answer1 === correct1 &&
+        answer2 === correct2
+      ) {
+
+        document.getElementById(
+          "result1"
+        ).innerHTML =
+          "✅ Correct...";
+
+        setTimeout(
+          puzzle2,
+          1000
+        );
+
+      } else {
+
+        document.getElementById(
+          "result1"
+        ).innerHTML =
+          "❌ Nope. Try again.";
+
+      }
+
+    }
+
+
+
+    /* =========================
+       PUZZLE 2
+    ========================= */
+
+    function puzzle2() {
+
+      document.body.innerHTML = `
+
+        <div class="puzzle-page">
+
+          <div class="puzzle-box">
+
+            <h2>Question</h2>
+
+            <div class="question">
+              What is melody?
+            </div>
+
+
+            <input
+              id="answerPuzzle2"
+              placeholder="Your answer"
+              autocomplete="off"
+            >
+
+
+            <br><br>
+
+
+            <button onclick="checkPuzzle2()">
+              Submit
+            </button>
+
+
+            <div
+              id="result2"
+              class="result"
+            ></div>
+
+          </div>
+
+        </div>
+
+      `;
+    }
+
+
+
+    function checkPuzzle2() {
+
+      const answer =
+        document
+          .getElementById("answerPuzzle2")
+          .value
+          .trim()
+          .toLowerCase();
+
+
+      /*
+        Your chosen answer.
+      */
+
+      const correct =
+        "modi and meloni";
+
+
+      if (answer === correct) {
+
+        document.getElementById(
+          "result2"
+        ).innerHTML =
+          "✅ Correct...";
+
+        setTimeout(
+          puzzle3,
+          1000
+        );
+
+      } else {
+
+        document.getElementById(
+          "result2"
+        ).innerHTML =
+          "❌ Wrong answer.";
+
+      }
+
+    }
+
+
+
+    /* =========================
+       PUZZLE 3
+    ========================= */
+
+    function puzzle3() {
+
+      document.body.innerHTML = `
+
+        <div class="puzzle-page">
+
+          <div class="puzzle-box">
+
+            <h2>What comes next?</h2>
+
+            <div class="sequence">
+
+              J, F, M, A, M, J,
+              J, A, S, O, N, ___
+
+            </div>
+
+
+            <input
+              id="answerPuzzle3"
+              placeholder="Your answer"
+              autocomplete="off"
+            >
+
+
+            <br><br>
+
+
+            <button onclick="checkPuzzle3()">
+              Submit
+            </button>
+
+
+            <div
+              id="result3"
+              class="result"
+            ></div>
+
+          </div>
+
+        </div>
+
+      `;
+    }
+
+
+
+    function checkPuzzle3() {
+
+      const answer =
+        document
+          .getElementById("answerPuzzle3")
+          .value
+          .trim()
+          .toLowerCase();
+
+
+      /*
+        Puzzle 3 answer.
+      */
+
+      const correct = "d";
+
+
+      if (answer === correct) {
+
+        document.getElementById(
+          "result3"
+        ).innerHTML =
+          "✅ Correct...";
+
+        setTimeout(
+          finalCheckpoint,
+          1000
+        );
+
+      } else {
+
+        document.getElementById(
+          "result3"
+        ).innerHTML =
+          "❌ Try again.";
+
+      }
+
+    }
+
+
+
+    /* =========================
+       FINAL CHECKPOINT
+    ========================= */
+
+    function finalCheckpoint() {
+
+      document.body.innerHTML = `
+
+        <div class="checkpoint">
+
+          <h1>
+            YOUR JOURNEY ENDS HERE
+          </h1>
+
+
+          <div class="checkpoint-box">
+
+            <p class="feedback-label">
+              Feedback
+            </p>
+
+
+            <input
+              id="feedback"
+              type="text"
+              placeholder="Enter your answer..."
+              autocomplete="off"
+            >
+
+
+            <br><br>
+
+
+            <button onclick="checkFinalAnswer()">
+              Submit
+            </button>
+
+
+            <p id="finalResult"></p>
+
+          </div>
+
+
+          <p class="side-clue">
+            Remember your journey from
+            <b>S</b>
+            to here.
+          </p>
+
+        </div>
+
+      `;
+    }
+
+
+
+    /* =========================
+       FINAL ANSWER
+    ========================= */
+
+    function checkFinalAnswer() {
+
+      const answer =
+        document
+          .getElementById("feedback")
+          .value
+          .trim()
+          .toLowerCase()
+          .replace(/\s+/g, " ");
+
+
+      /*
+        Prototype final answer:
+
+        Modi and Meloni's Vater has 4 sons.
+
+        We will improve the checking system
+        before publishing.
+      */
+
+      const correctAnswer =
+        "modi and meloni's vater has 4 sons";
+
+
+      if (answer === correctAnswer) {
+
+        document.getElementById(
+          "finalResult"
+        ).innerHTML =
+          "✅ PASS";
+
+
+        setTimeout(
+          uselessPage,
+          1000
+        );
+
+      } else {
+
+        document.getElementById(
+          "finalResult"
+        ).innerHTML =
+          "❌ Your journey has not ended yet.";
+
+      }
+
+    }
+
+
+
+    /* =========================
+       USELLESS PAGE
+    ========================= */
+
+    function uselessPage() {
+
+      document.body.innerHTML = `
+
+        <div class="useless">
+
+          <h1>
+            USELLESS
+          </h1>
+
+
+          <p>
+            Congratulations.
+          </p>
+
+
+          <p>
+            You have successfully completed
+            the journey.
+          </p>
+
+
+          <p>
+            There is absolutely nothing else here.
+          </p>
+
+
+          <!--
+            The 4 × 4 secret button.
+          -->
+
+          <button
+            class="secret-dot"
+            onclick="realSecret()"
+            aria-label="Secret"
+          ></button>
+
+        </div>
+
+      `;
+    }
+
+
+
+    /* =========================
+       REAL SECRET WEBSITE
+    ========================= */
+
+    function realSecret() {
+
+      document.body.innerHTML = `
+
+        <div class="real-secret">
+
+          <h1>
+            YOU ACTUALLY FOUND IT. 👀
+          </h1>
+
+
+          <p>
+            This is the REAL secret website.
+          </p>
+
+
+          <p>
+            Respect. 🫡
+          </p>
+
+        </div>
+
+      `;
+    }
+
+  </script>
+
+</body>
+  </html>
