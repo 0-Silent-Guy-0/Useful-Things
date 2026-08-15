@@ -37,15 +37,14 @@ h1 {
 }
 
 .container {
-  max-width: 1000px;
+  max-width: 900px;
   margin: 30px auto;
   padding: 20px;
 }
 
 .tools {
   display: grid;
-  grid-template-columns:
-    repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 15px;
 }
 
@@ -67,7 +66,6 @@ button {
   background: white;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 15px;
 }
 
 button:hover {
@@ -80,13 +78,15 @@ footer {
   padding: 30px;
 }
 
+/* THE SECRET S */
+
 .secret-s {
-  cursor: default;
+  cursor: pointer;
 }
 
 
 /* =========================
-   APP WINDOWS
+   APP PAGES
 ========================= */
 
 .app-page {
@@ -130,45 +130,34 @@ footer {
 .calc-display {
   width: 100%;
   height: 60px;
-  font-size: 26px;
+  font-size: 25px;
   text-align: right;
   padding: 10px;
   margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
 }
 
 .calc-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
+  gap: 7px;
 }
 
 .calc-grid button {
   height: 55px;
-  font-size: 20px;
+  font-size: 19px;
 }
 
 
 /* TIMER */
 
 .timer-display {
-  font-size: 60px;
-  margin: 25px 0;
+  font-size: 55px;
   font-family: monospace;
+  margin: 25px 0;
 }
 
 
 /* CHECKLIST */
-
-.checklist-input {
-  display: flex;
-  gap: 8px;
-}
-
-.checklist-input input {
-  flex: 1;
-}
 
 .task {
   display: flex;
@@ -189,25 +178,23 @@ footer {
 }
 
 
-/* RANDOM */
+/* RANDOM RESULT */
 
 .random-result {
   font-size: 28px;
-  margin: 25px;
   font-weight: bold;
+  margin: 25px;
 }
 
 
-/* =========================
-   QR CODE
-========================= */
+/* QR */
 
 .qr-section {
+  text-align: center;
   background: white;
   max-width: 300px;
-  margin: 35px auto;
+  margin: 30px auto;
   padding: 20px;
-  text-align: center;
   border: 1px solid #ddd;
   border-radius: 10px;
 }
@@ -327,7 +314,6 @@ footer {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-family: Arial, sans-serif;
   background: white;
   text-align: center;
   padding: 20px;
@@ -475,7 +461,7 @@ Open
 <h2>🧮 Calculator</h2>
 
 <p>
-Do some calculations.
+Calculate anything.
 </p>
 
 <button onclick="openCalculator()">
@@ -509,7 +495,7 @@ Generate
 <h2>⏱️ Timer</h2>
 
 <p>
-A simple countdown timer.
+A simple countdown.
 </p>
 
 <button onclick="openTimer()">
@@ -526,7 +512,7 @@ Open
 <h2>🔄 Unit Converter</h2>
 
 <p>
-Convert simple units.
+Convert units.
 </p>
 
 <button onclick="openConverter()">
@@ -578,16 +564,16 @@ Choose
 <div class="qr-section">
 
 <h3>
-📱 Scan to open Probably Boring
+📱 Probably Boring QR
 </h3>
 
 <img
 src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2F0-silent-guy-0.github.io%2FUseful-Things%2F"
-alt="QR code"
+alt="QR Code"
 >
 
 <p>
-Scan me 👀
+Scan to open the website.
 </p>
 
 </div>
@@ -598,6 +584,7 @@ Scan me 👀
 <footer>
 © 2026 Probably Boring
 </footer>
+
 
 
 <script>
@@ -648,17 +635,14 @@ localStorage.getItem("probablyNotes") || "";
 
 function saveNotes() {
 
-const notes =
-document.getElementById("notes").value;
-
 localStorage.setItem(
 "probablyNotes",
-notes
+document.getElementById("notes").value
 );
 
 document.getElementById(
 "noteStatus"
-).innerHTML =
+).innerText =
 "✅ Saved!";
 
 }
@@ -706,7 +690,7 @@ readonly
 <button onclick="calculate()">=</button>
 <button onclick="calcInput('+')">+</button>
 
-<button onclick="clearCalc()">C</button>
+<button onclick="clearCalculator()">C</button>
 
 </div>
 
@@ -717,6 +701,7 @@ Home
 </button>
 
 </div>
+
 </div>
 
 `;
@@ -733,7 +718,7 @@ document.getElementById(
 }
 
 
-function clearCalc() {
+function clearCalculator() {
 
 document.getElementById(
 "calcDisplay"
@@ -749,15 +734,18 @@ document.getElementById(
 "calcDisplay"
 );
 
-try {
-
 const expression =
 display.value;
 
 if (!/^[0-9+\-*/.() ]+$/.test(expression)) {
+
 display.value = "Error";
+
 return;
+
 }
+
+try {
 
 display.value =
 Function(
@@ -781,7 +769,7 @@ display.value = "Error";
 
 function randomNumber() {
 
-let number =
+const number =
 Math.floor(
 Math.random() * 100
 ) + 1;
@@ -802,6 +790,9 @@ let timerSeconds = 0;
 
 
 function openTimer() {
+
+timerInterval = null;
+timerSeconds = 0;
 
 document.body.innerHTML = `
 
@@ -856,7 +847,9 @@ Home
 
 function startTimer() {
 
-if (timerInterval) return;
+if (timerInterval) {
+return;
+}
 
 const input =
 document.getElementById(
@@ -864,7 +857,7 @@ document.getElementById(
 );
 
 if (
-timerSeconds <= 0 &&
+timerSeconds === 0 &&
 input.value
 ) {
 
@@ -879,7 +872,7 @@ timerSeconds < 1
 ) {
 
 alert(
-"Enter a number of seconds."
+"Enter the number of seconds."
 );
 
 return;
@@ -898,11 +891,15 @@ updateTimerDisplay();
 
 if (timerSeconds <= 0) {
 
-clearInterval(timerInterval);
+clearInterval(
+timerInterval
+);
 
 timerInterval = null;
 
-alert("⏰ Time's up!");
+alert(
+"⏰ Time's up!"
+);
 
 }
 
@@ -915,7 +912,9 @@ alert("⏰ Time's up!");
 
 function pauseTimer() {
 
-clearInterval(timerInterval);
+clearInterval(
+timerInterval
+);
 
 timerInterval = null;
 
@@ -924,10 +923,11 @@ timerInterval = null;
 
 function resetTimer() {
 
-clearInterval(timerInterval);
+clearInterval(
+timerInterval
+);
 
 timerInterval = null;
-
 timerSeconds = 0;
 
 const display =
@@ -952,10 +952,14 @@ document.getElementById(
 "timerDisplay"
 );
 
-if (!display) return;
+if (!display) {
+return;
+}
 
 const minutes =
-Math.floor(timerSeconds / 60);
+Math.floor(
+timerSeconds / 60
+);
 
 const seconds =
 timerSeconds % 60;
@@ -1026,7 +1030,7 @@ Fahrenheit → Celsius
 
 </select>
 
-<br><br>
+<br>
 
 <button onclick="convertUnit()">
 Convert
@@ -1077,44 +1081,31 @@ return;
 
 }
 
-let result;
+let result = 0;
 
-
-switch(type) {
-
-case "km-mi":
+if (type === "km-mi")
 result = value * 0.621371;
-break;
 
-case "mi-km":
+if (type === "mi-km")
 result = value * 1.60934;
-break;
 
-case "m-ft":
+if (type === "m-ft")
 result = value * 3.28084;
-break;
 
-case "ft-m":
+if (type === "ft-m")
 result = value * 0.3048;
-break;
 
-case "kg-lb":
+if (type === "kg-lb")
 result = value * 2.20462;
-break;
 
-case "lb-kg":
+if (type === "lb-kg")
 result = value * 0.453592;
-break;
 
-case "c-f":
-result = (value * 9/5) + 32;
-break;
+if (type === "c-f")
+result = (value * 9 / 5) + 32;
 
-case "f-c":
-result = (value - 32) * 5/9;
-break;
-
-}
+if (type === "f-c")
+result = (value - 32) * 5 / 9;
 
 document.getElementById(
 "conversionResult"
@@ -1141,8 +1132,6 @@ document.body.innerHTML = `
 
 <h2>📋 Checklist</h2>
 
-<div class="checklist-input">
-
 <input
 id="taskInput"
 placeholder="Add a task..."
@@ -1151,8 +1140,6 @@ placeholder="Add a task..."
 <button onclick="addTask()">
 Add
 </button>
-
-</div>
 
 <div id="taskList"></div>
 
@@ -1183,7 +1170,9 @@ document.getElementById(
 const text =
 input.value.trim();
 
-if (!text) return;
+if (!text) {
+return;
+}
 
 checklist.push({
 text: text,
@@ -1204,7 +1193,9 @@ document.getElementById(
 "taskList"
 );
 
-if (!list) return;
+if (!list) {
+return;
+}
 
 list.innerHTML = "";
 
@@ -1217,64 +1208,82 @@ document.createElement(
 );
 
 div.className =
-"task" +
-(task.done ? " done" : "");
+"task";
 
-div.innerHTML = `
-
-<input
-type="checkbox"
-${task.done ? "checked" : ""}
-onchange="toggleTask(${index})"
->
-
-<span>
-${escapeHTML(task.text)}
-</span>
-
-<button
-onclick="deleteTask(${index})"
->
-❌
-</button>
-
-`;
-
-list.appendChild(div);
-
+if (task.done) {
+div.classList.add("done");
 }
+
+const checkbox =
+document.createElement(
+"input"
+);
+
+checkbox.type =
+"checkbox";
+
+checkbox.checked =
+task.done;
+
+checkbox.onchange =
+function() {
+
+task.done =
+checkbox.checked;
+
+renderTasks();
+
+};
+
+
+const span =
+document.createElement(
+"span"
+);
+
+span.innerText =
+task.text;
+
+
+const deleteButton =
+document.createElement(
+"button"
+);
+
+deleteButton.innerText =
+"❌";
+
+deleteButton.onclick =
+function() {
+
+checklist.splice(
+index,
+1
+);
+
+renderTasks();
+
+};
+
+
+div.appendChild(
+checkbox
+);
+
+div.appendChild(
+span
+);
+
+div.appendChild(
+deleteButton
+);
+
+list.appendChild(
+div
 );
 
 }
-
-
-function toggleTask(index) {
-
-checklist[index].done =
-!checklist[index].done;
-
-renderTasks();
-
-}
-
-
-function deleteTask(index) {
-
-checklist.splice(index,1);
-
-renderTasks();
-
-}
-
-
-function escapeHTML(text) {
-
-const div =
-document.createElement("div");
-
-div.textContent = text;
-
-return div.innerHTML;
+);
 
 }
 
@@ -1340,7 +1349,7 @@ text
 x => x.trim()
 )
 .filter(
-x => x.length > 0
+x => x
 );
 
 if (!choices.length) {
@@ -1589,8 +1598,10 @@ What comes next?
 </h2>
 
 <div class="sequence">
+
 J, F, M, A, M, J,
 J, A, S, O, N, ___
+
 </div>
 
 <input
@@ -1629,7 +1640,9 @@ document.getElementById(
 .trim()
 .toLowerCase();
 
-if (answer === "d") {
+if (
+answer === "d"
+) {
 
 document.getElementById(
 "result3"
@@ -1705,6 +1718,10 @@ to here.
 }
 
 
+/* =========================
+   FINAL ANSWER
+========================= */
+
 function checkFinalAnswer() {
 
 const answer =
@@ -1719,7 +1736,9 @@ document.getElementById(
 const correctAnswer =
 "modi and meloni's vater has 4 sons";
 
-if (answer === correctAnswer) {
+if (
+answer === correctAnswer
+) {
 
 document.getElementById(
 "finalResult"
@@ -1746,43 +1765,245 @@ document.getElementById(
 
 
 /* =========================
-   USELLESS
+   USELLESS PAGE
 ========================= */
 
 function uselessPage() {
 
-document.body.innerHTML = `
+  document.body.innerHTML = `
 
-<div class="useless">
+    <div class="useless">
 
-<h1>
-USELLESS
-</h1>
+      <h1>
+        USELLESS
+      </h1>
 
-<p>
-Congratulations.
-</p>
+      <p>
+        Congratulations.
+      </p>
 
-<p>
-You have successfully completed
-the journey.
-</p>
+      <p>
+        You have successfully completed
+        the journey.
+      </p>
 
-<p>
-There is absolutely nothing else here.
-</p>
+      <p>
+        There is absolutely nothing else here.
+      </p>
 
-<button
-class="secret-dot"
-onclick="realSecret()"
-aria-label="Secret"
-></button>
+      <button
+        class="secret-dot"
+        onclick="realSecret()"
+        aria-label="Secret"
+      ></button>
 
-</div>
+    </div>
 
-`;
+  `;
 
 }
 
 
-/* ======
+/* =========================
+   FINAL SECRET TERMINAL
+========================= */
+
+function realSecret() {
+
+  document.body.innerHTML = `
+
+    <div class="terminal-page">
+
+      <div class="terminal">
+
+        <div class="terminal-title">
+          SECRET TERMINAL
+        </div>
+
+        <div id="terminalOutput">
+
+          <p>
+            ACCESS GRANTED.
+          </p>
+
+          <p>
+            You found what wasn't supposed
+            to be found.
+          </p>
+
+          <p>
+            Type <b>help</b> to continue.
+          </p>
+
+        </div>
+
+        <div class="terminal-input">
+
+          <span>&gt;</span>
+
+          <input
+            id="commandInput"
+            type="text"
+            autocomplete="off"
+            autofocus
+          >
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+  document
+    .getElementById("commandInput")
+    .addEventListener("keydown", function(event) {
+
+      if (event.key === "Enter") {
+
+        const command =
+          this.value.trim().toLowerCase();
+
+        this.value = "";
+
+        runCommand(command);
+
+      }
+
+    });
+
+}
+
+
+/* =========================
+   TERMINAL COMMANDS
+========================= */
+
+function runCommand(command) {
+
+  const output =
+    document.getElementById("terminalOutput");
+
+  let message = "";
+
+
+  if (command === "help") {
+
+    message = `
+
+      <p>AVAILABLE COMMANDS:</p>
+
+      <p>• help</p>
+      <p>• about</p>
+      <p>• credits</p>
+      <p>• secret</p>
+
+    `;
+
+  }
+
+
+  else if (command === "about") {
+
+    message = `
+
+      <p>
+        This website was never supposed
+        to be this complicated.
+      </p>
+
+      <p>
+        Yet somehow... you found it.
+      </p>
+
+    `;
+
+  }
+
+
+  else if (command === "credits") {
+
+    message = `
+
+      <p>
+        Created by:
+        <b>0-Silent-Guy-0</b>
+      </p>
+
+      <p>
+        Probably Boring™
+      </p>
+
+    `;
+
+  }
+
+
+  else if (command === "secret") {
+
+    message = `
+
+      <p>
+        👀 You found another secret.
+      </p>
+
+      <p>
+        But I'm not telling you
+        what it is yet...
+      </p>
+
+    `;
+
+  }
+
+
+  else if (command === "") {
+
+    return;
+
+  }
+
+
+  else {
+
+    message = `
+
+      <p>
+        Unknown command:
+        ${escapeHTML(command)}
+      </p>
+
+      <p>
+        Type <b>help</b>.
+      </p>
+
+    `;
+
+  }
+
+
+  output.innerHTML += message;
+
+}
+
+
+/* =========================
+   SAFE TEXT
+========================= */
+
+function escapeHTML(text) {
+
+  const div =
+    document.createElement("div");
+
+  div.textContent = text;
+
+  return div.innerHTML;
+
+}
+
+</script>
+
+</body>
+</html>
